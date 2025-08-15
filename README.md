@@ -6,6 +6,7 @@
 3. It will then assign them columns in a .log file ordered by a desired odering integer value you provide at the point of instantiation or alphabetically to break ties / ambiguous order in the vector case
 
 *Note that for my purposes the logger currently stipulates time,x,y,z,yaw as necessary logged variables to ensure I have the bare minimum I need from my quadrotor experiments. Users may alter this.*
+
 5. It then generates a '/data_analysis' subdirectory within the directory of the ROS2 node that called the Logger
 6. It also automatically populates this directory with a DataAnalysis.ipynb equipped with tools I commonly use for my work (RMSE, Plotting, overleaf/latek-compatible pdf exports for the plots, etc) as well as a subdirectory '/data_analysis/log_files' where the log files are saved
 
