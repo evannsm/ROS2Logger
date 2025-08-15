@@ -23,13 +23,18 @@ class Logger:
 
         print(f"[logger] Writing to: {self.full_path}")
 
-        self.data_analysis_notebook = 'DataAnalysis.ipynb'
-        source_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), self.data_analysis_notebook)
-        destination_path = os.path.dirname(os.path.dirname(base_path))
-        self.copy_file(source_path, destination_path)
 
-    def copy_file(self, source_path: str, destination_path: str):
-        if not os.path.isfile(os.path.join(destination_path, self.data_analysis_notebook)):
+        self.data_analysis_notebook = 'DataAnalysis.ipynb'
+        self.data_utilities = 'utilities.py'
+        source_path = os.path.join(os.path.dirname(os.path.abspath(__file__)))
+        destination_path = os.path.dirname(os.path.dirname(base_path))
+        self.copy_file(source_path, destination_path, self.data_analysis_notebook)
+        self.copy_file(source_path, destination_path, self.data_utilities)
+
+
+    def copy_file(self, source_path: str, destination_path: str, file_to_copy: str):
+        source_path = os.path.join(source_path, file_to_copy)
+        if not os.path.isfile(os.path.join(destination_path, file_to_copy)):
             try:
                 shutil.copy(source_path, destination_path)
                 print(f"'{os.path.basename(source_path)}' has been successfully copied to '{destination_path}'")
@@ -43,8 +48,8 @@ class Logger:
                 print(f"An unexpected error occurred: {e}")
             finally:
                 return
-        print(f"Data Analysis notebook already exists!")
-        
+
+        print(f"File {file_to_copy} already exists!")
 
 
     def _discover_logs(self, obj):
