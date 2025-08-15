@@ -16,7 +16,7 @@ A custom ROS 2 logging utility that makes structured experiment logging painless
    - Creates a `/data_analysis` folder alongside the ROS 2 node that invoked the logger
 5. **Built-in analysis tools**
    - Populates `/data_analysis` with:
-     - `DataAnalysis.ipynb` notebook containing:
+     - `DataAnalysis.ipynb` notebook (and a utilities module) containing:
        - RMSE computation
        - Plotting utilities
        - PDF export for Overleaf/LaTeX
