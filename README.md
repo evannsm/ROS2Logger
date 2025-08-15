@@ -1,13 +1,39 @@
 # ROS2Logger
 
-## This is my custom ROS2 Logger that does the following for you:
-1. Provides custom data types for logging an sequence of values (and even a data type for a sequence of vector values) via appending like a list
-2. Provides shutdown hooks so that when your ROS2 Node terminates via exit(0)/raised Error/etc, it will automatically pull variables of these data types from your node
-3. It will then assign them columns in a .log file ordered by a desired odering integer value you provide at the point of instantiation or alphabetically to break ties / ambiguous order in the vector case
-4. It then generates a '/data_analysis' subdirectory within the directory of the ROS2 node that called the Logger
-5. It also automatically populates this directory with a DataAnalysis.ipynb equipped with tools I commonly use for my work (RMSE, Plotting, overleaf/latek-compatible pdf exports for the plots, etc) as well as a subdirectory '/data_analysis/log_files' where the log files are saved
+A custom ROS 2 logging utility that makes structured experiment logging painless.
 
-*Note that for my purposes the logger currently stipulates time,x,y,z,yaw as necessary logged variables to ensure I have the bare minimum I need from my quadrotor experiments. Users may alter this.*
+## ✨ Features
+1. **Custom log data types**
+   - Append values like a list  
+   - Supports scalar sequences and sequences of vectors
+2. **Automatic shutdown hooks**
+   - On node exit (normal or error), automatically collects all log-type variables from your node
+3. **Column ordering**
+   - Columns in the log file are sorted by:
+     1. Your provided ordering integer
+     2. Alphabetical order (for ties)
+4. **Data directory creation**
+   - Creates a `/data_analysis` folder alongside the ROS 2 node that invoked the logger
+5. **Built-in analysis tools**
+   - Populates `/data_analysis` with:
+     - `DataAnalysis.ipynb` notebook containing:
+       - RMSE computation
+       - Plotting utilities
+       - PDF export for Overleaf/LaTeX
+     - `/data_analysis/log_files` subdirectory for logs
+
+> **Note:**  
+> By default, the logger requires `time`, `x`, `y`, `z`, and `yaw` to be present to ensure minimum dataset completeness for quadrotor experiments.  
+> You can modify this requirement in the code.
+
+---
+
+## 🚀 Quick Start
+
+1. **Create** a ROS 2 workspace with a `src/` directory.  
+2. **Clone** this repo into `src/`:
+   ```bash
+   git clone git@github.com:evannsm/ROS2Logger.git
 
 ## How to use:
 1. Create a ROS2 workspace with a src/ directory
