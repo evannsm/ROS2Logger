@@ -35,5 +35,6 @@ A custom ROS 2 logging utility that makes structured experiment logging painless
    ```bash
    git clone git@github.com:evannsm/ROS2Logger.git
 3. **Build** the workspace (symbolic links preferred):
-
-4. Use the test_logger package for a quick and easy example of this system in action, and learn to operate this Logger package!
+   ```bash
+   colcon build --symlink-install
+5. **Use** the `test_logger` package for a quick and easy example of this system in action, and learn to operate this Logger package!
