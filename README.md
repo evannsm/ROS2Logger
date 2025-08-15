@@ -34,15 +34,6 @@ A custom ROS 2 logging utility that makes structured experiment logging painless
 2. **Clone** this repo into `src/`:
    ```bash
    git clone git@github.com:evannsm/ROS2Logger.git
+3. **Build** the workspace (symbolic links preferred):
 
-## How to use:
-1. Create a ROS2 workspace with a src/ directory
-3. Git clone this remote repository into the src/ of your ROS2 workspace
-```
-git clone git@github.com:evannsm/ROS2Logger.git
-```
-3. Go to the root of your ROS2 workspace and build (symbolic links preferrable)
-```
-colcon build --symlink-install
-```
 4. Use the test_logger package for a quick and easy example of this system in action, and learn to operate this Logger package!
