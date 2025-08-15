@@ -1,4 +1,3 @@
-# logger.py
 import csv, os
 import shutil
 import numpy as np
@@ -39,17 +38,17 @@ class Logger:
                 shutil.copy(source_path, destination_path)
                 print(f"'{os.path.basename(source_path)}' has been successfully copied to '{destination_path}'")
             except FileNotFoundError:
-                print(f"Error: Source file '{source_path}' not found.")
+                print(f"[logger][ERROR]: source file '{source_path}' not found.")
             except IsADirectoryError:
-                print(f"Error: Destination '{destination_path}' is a directory, but a file path was expected.")
+                print(f"[logger][ERROR]: destination '{destination_path}' is a directory, but a file path was expected.")
             except PermissionError:
-                print(f"Error: Permission denied to copy to '{destination_path}'.")
+                print(f"[logger][ERROR]: permission denied to copy to '{destination_path}'.")
             except Exception as e:
-                print(f"An unexpected error occurred: {e}")
+                print(f"[logger][ERROR]: an unexpected error occurred: {e}")
             finally:
                 return
 
-        print(f"File {file_to_copy} already exists!")
+        print(f"[logger] File {file_to_copy} already exists!")
 
 
     def _discover_logs(self, obj):
@@ -103,4 +102,4 @@ class Logger:
             for r in range(max_len):
                 w.writerow([v.item() if hasattr(v, "item") else v for v in data[r, :]])
 
-        print(f"[logger] Wrote {max_len} rows × {len(headers)} cols to {self.full_path}")
+        print(f"[logger] Wrote {max_len} rows & {len(headers)} cols to {self.full_path}")

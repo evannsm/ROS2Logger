@@ -61,7 +61,6 @@ def main():
     install_shutdown_logging(log, node)#, also_shutdown=rclpy.shutdown)# Ensure logs are flushed on Ctrl+C / SIGTERM / normal exit
     try:
         rclpy.spin(node)
-        node.destroy_node()
     finally:
         # belt & suspenders
         pass

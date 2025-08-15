@@ -1,4 +1,3 @@
-# logtypes.py
 from dataclasses import dataclass, field
 from typing import List, Iterable, Any, Tuple
 import numpy as np
