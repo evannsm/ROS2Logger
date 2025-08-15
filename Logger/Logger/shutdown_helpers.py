@@ -13,10 +13,15 @@ def install_shutdown_logging(logger, source, *, also_shutdown=None, include_atex
     def _safe_shutdown():
         try:
             # Only shutdown if a context is alive
+            print(f"[logger] calling rclpy.shutdown()")
             if rclpy.ok():
                 rclpy.shutdown()
         except Exception as e:
             print(f"[logger] shutdown hook error: {e}")
+
+    def _destroy_node():
+        print(f"[logger] destroying node {source.get_name()}")
+        source.destroy_node()
 
     def _run_once(_sig=None, _frame=None):
         nonlocal _done
@@ -24,17 +29,21 @@ def install_shutdown_logging(logger, source, *, also_shutdown=None, include_atex
             if _done:
                 return
             _done = True
+    
         try:
             logger.log(source)
         except Exception as e:
             print(f"[logger] error during shutdown log: {e}")
         finally:
+            _destroy_node()
             if callable(also_shutdown):
                 try:
+                    print(f"[logger] calling also_shutdown: {also_shutdown.__name__}")
                     also_shutdown()
                 except Exception as e:
                     print(f"[logger] shutdown hook error: {e}")
             else:
+                print(f"[logger] calling built-in safe shutdown")
                 _safe_shutdown()
 
     # Register signal handlers

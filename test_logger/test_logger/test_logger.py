@@ -58,9 +58,10 @@ def main():
     base_dir = sys.argv[2] if len(sys.argv) > 2 else base_path
     log = Logger(filename, base_dir)
 
-    install_shutdown_logging(log, node, also_shutdown=rclpy.shutdown)# Ensure logs are flushed on Ctrl+C / SIGTERM / normal exit
+    install_shutdown_logging(log, node)#, also_shutdown=rclpy.shutdown)# Ensure logs are flushed on Ctrl+C / SIGTERM / normal exit
     try:
         rclpy.spin(node)
+        node.destroy_node()
     finally:
         # belt & suspenders
         pass
