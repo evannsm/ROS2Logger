@@ -37,7 +37,7 @@ class OffboardControl(Node):
         self.z_logtype.append(3.0)
         self.yaw_logtype.append(0.0)
 
-        self.xref_logtype.append(0.0)
+        self.xref_logtype.append(1.0)
         self.yref_logtype.append(2.0)
         self.zref_logtype.append(3.0)
         self.yawref_logtype.append(0.0)

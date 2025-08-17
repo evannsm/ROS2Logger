@@ -2,7 +2,7 @@ import csv, os
 import shutil
 import numpy as np
 from typing import Optional, Union
-from .logtypes import LogType, VectorLogType
+from .logtypes import ColumnarLog
 
 class Logger:
     def __init__(self, filename: str, base_dir: str):
@@ -53,7 +53,7 @@ class Logger:
 
     def _discover_logs(self, obj):
         return [
-            val for _, val in vars(obj).items() if isinstance(val, (LogType, VectorLogType))
+            val for _, val in vars(obj).items() if isinstance(val, (ColumnarLog))
         ]
 
     def log(self, source):
