@@ -1,3 +1,10 @@
 hello
+.vscode
 **/__pycache__
-**/browse.*
+
+# Local ignores
+.vscode/
+__pycache__/
+*.py[cod]
+*.db
+log/

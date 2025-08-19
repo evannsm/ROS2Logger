@@ -62,7 +62,7 @@ class Logger:
             print("[logger] No LogType or VectorLogTypes found; nothing to write.")
             return
 
-        required = ["time", "x", "y", "z"]
+        required = ["time", "x", "y", "z", "yaw"]
         have = {log.name for log in log_objects}
         missing = [r for r in required if r not in have]
         if missing:
