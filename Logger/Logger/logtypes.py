@@ -12,7 +12,10 @@ class ColumnarLog:
 
 @dataclass
 class LogType(ColumnarLog):
-    """Scalar log: 1 column"""
+    """
+        Scalar log: 1 column
+        Required values: [time, x, y, z, yaw]
+    """
     name: str
     order: int
     data: List[Any] = field(default_factory=list)

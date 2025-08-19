@@ -44,6 +44,7 @@ def install_shutdown_logging(logger, source, *, also_shutdown=None, include_atex
             else:
                 # print(f"[logger][shutdown] Calling built-in safe shutdown")
                 _safe_shutdown()
+            print(f"[logger][terminate]{source.get_name()} has shutdown")
 
     # Register signal handlers
     signal.signal(signal.SIGINT,  _run_once)
