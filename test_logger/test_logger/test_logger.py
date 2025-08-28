@@ -85,7 +85,7 @@ def main():
 
     try:
         print(f"{BANNER}\nInitializing ROS 2 node\n{BANNER}")
-        logger = Logger(filename, base_path)
+        logger = Logger(filename, base_path) # pyright: ignore[reportCallIssue]
         rclpy.spin(node)
     except KeyboardInterrupt:
         print("\nKeyboard interrupt detected (Ctrl+C), exiting...")
