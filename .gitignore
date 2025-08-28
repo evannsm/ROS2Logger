@@ -1,5 +1,5 @@
 hello
 **.db**
-**/__pycache__
 .vscode/
 log/
+**/__pycache__/
