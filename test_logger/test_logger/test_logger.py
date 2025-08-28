@@ -2,11 +2,13 @@
 import rclpy
 from rclpy.node import Node
 
-import sys
 import os
+import sys
+import inspect
+import argparse
+import traceback
 
-from Logger import LogType, VectorLogType, Logger, install_shutdown_logging
-
+from Logger import LogType, VectorLogType, Logger # pyright: ignore[reportAttributeAccessIssue]
 
 class OffboardControl(Node):
     def __init__(self):
@@ -16,12 +18,12 @@ class OffboardControl(Node):
         self.x_logtype    = LogType("x",    1)
         self.y_logtype    = LogType("y",    2)
         self.z_logtype    = LogType("z",    3)
-        self.yaw_logtype  = LogType("psi", 4)
+        self.yaw_logtype  = LogType("yaw", 4)
 
         self.xref_logtype = LogType("x_ref", 5)
         self.yref_logtype = LogType("y_ref", 6)
         self.zref_logtype = LogType("z_ref", 7)
-        self.yawref_logtype = LogType("psi_ref", 8)
+        self.yawref_logtype = LogType("yaw_ref", 8)
 
         self.input_logtype = VectorLogType("input", 5, ["force", "moment_x", "moment_y", "moment_z"])
 
@@ -48,22 +50,61 @@ class OffboardControl(Node):
             # raise ValueError("stop")
             exit(0)
 
+
+BANNER = "=" * 65
+
 def main():
-    import sys, os
+
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("--log-file",
+                        required=True)
+    args, unknown = parser.parse_known_args(sys.argv[1:])
+    print(f"Arguments: {args}, Unknown: {unknown}")
+    filename = args.log_file
+    base_path = os.path.dirname(os.path.abspath(__file__))  # Get the script's directory
+    print(f"{filename=}, {base_path=}")
+
     rclpy.init()
     node = OffboardControl()
+    logger = None
 
-    filename = sys.argv[1] if len(sys.argv) > 1 else "log.log"
-    base_path = os.path.dirname(os.path.abspath(__file__))  # Get the script's directory
-    base_dir = sys.argv[2] if len(sys.argv) > 2 else base_path
-    log = Logger(filename, base_dir)
+    def shutdown_logging(*args):
+        print("\nInterrupt/Error/Termination Detected, Triggering Logging Process and Shutting Down Node...")
 
-    install_shutdown_logging(log, node)#, also_shutdown=rclpy.shutdown)# Ensure logs are flushed on Ctrl+C / SIGTERM / normal exit
+        try:
+            if logger:
+                logger.log(node)
+            node.destroy_node()
+        except Exception as e:
+            frame = inspect.currentframe()
+            func_name = frame.f_code.co_name if frame is not None else "<unknown>"
+            print(f"\nError in {__name__}:{func_name}: {e}")
+            traceback.print_exc()
+
+
     try:
+        print(f"{BANNER}\nInitializing ROS 2 node\n{BANNER}")
+        logger = Logger(filename, base_path)
         rclpy.spin(node)
+    except KeyboardInterrupt:
+        print("\nKeyboard interrupt detected (Ctrl+C), exiting...")
+    except Exception as e:
+            frame = inspect.currentframe()
+            func_name = frame.f_code.co_name if frame is not None else "<unknown>"
+            print(f"\nError in {__name__}:{func_name}: {e}")
+            traceback.print_exc()
     finally:
-        # belt & suspenders
-        pass
+        shutdown_logging()
+        print("\nNode has shut down.")
 
-if __name__ == "__main__":
-    main()
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except Exception as e:
+            frame = inspect.currentframe()
+            func_name = frame.f_code.co_name if frame is not None else "<unknown>"
+            print(f"\nError in {__name__}:{func_name}: {e}")
+            traceback.print_exc()

@@ -2,4 +2,4 @@ hello
 **.db**
 .vscode/
 log/
-**/__pycache__/
+**/__pycache__/**
