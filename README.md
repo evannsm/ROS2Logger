@@ -3,8 +3,9 @@
 A custom ROS 2 logging utility that makes structured experiment logging painless.
 
 ## ✨ Features
+
 1. **Custom log data types**
-   - Append values like a list  
+   - Append values like a list
    - Supports scalar sequences and sequences of vectors
 2. **Automatic shutdown hooks**
    - On node exit (normal or error), automatically collects all log-type variables from your node
@@ -30,15 +31,13 @@ A custom ROS 2 logging utility that makes structured experiment logging painless
 
 ## 🚀 Quick Start
 
-1. **Create** a ROS 2 workspace with a `src/` directory.  
+1. **Create** a ROS 2 workspace with a `src/` directory.
 2. **Clone** this repo into `src/`:
    ```bash
    git clone git@github.com:evannsm/ROS2Logger.git
+   ```
 3. **Build** the workspace (symbolic links preferred):
    ```bash
    colcon build --symlink-install
-5. **Use** the `test_logger` package for a quick and easy example of this system in action, and learn to operate this Logger package!
-hi
-hello
-TETSTS
-TETSTS
+   ```
+4. **Use** my [`test_logger`](https://github.com/evannsm/test_logger) package for a quick and easy example of this system in action, and learn to operate this Logger package!
