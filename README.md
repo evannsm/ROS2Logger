@@ -2,6 +2,12 @@
 
 A custom ROS 2 logging utility that makes structured experiment logging painless.
 
+I recommend for basic use to clone like this: (gets rid of .git gives you both directories you need right where you intended them, not inside the git ROS2Logger directory)
+```bash
+npx degit https://github.com/evannsm/ROS2Logger.git
+```
+
+
 ## ✨ Features
 1. **Custom log data types**
    - Append values like a list  
