@@ -228,13 +228,51 @@ def generate_log_file(platform_name, controller_name, trajectory_name,
     vy_ref = np.gradient(y_ref, dt)
     vz_ref = np.gradient(z_ref, dt)
 
-    # Create DataFrame with all required columns
+    # Generate body rates (p, q, r) and control inputs
+    p = np.gradient(yaw, dt)  # Roll rate (approximation)
+    q = np.gradient(yaw, dt) * 0.5  # Pitch rate
+    r = np.gradient(yaw, dt) * 1.5  # Yaw rate
+
+    # Control inputs (normalized values)
+    throttle_input = 0.85 + np.random.normal(0, 0.05, n_samples)
+    p_input = np.gradient(p, dt) * 0.1 + np.random.normal(0, 0.05, n_samples)
+    q_input = np.gradient(q, dt) * 0.1 + np.random.normal(0, 0.05, n_samples)
+    r_input = np.gradient(r, dt) * 0.1 + np.random.normal(0, 0.05, n_samples)
+
+    # CBF values (should be negative for constraints, positive for safe)
+    cbf_v_throttle = -2.0 + np.random.normal(0, 0.5, n_samples)
+    cbf_v_p = np.zeros(n_samples)
+    cbf_v_q = np.zeros(n_samples)
+    cbf_v_r = np.zeros(n_samples)
+
+    # Map platform/controller/trajectory to string format matching real data
+    platform_str_map = {'Simulation': 'sim', 'Hardware': 'hw'}
+    controller_str_map = {'NR Standard': 'nr', 'NR Enhanced': 'nr_enhanced', 'MPC': 'mpc'}
+    trajectory_str_map = {
+        'Circle H': 'circle_horz',
+        'Circle V': 'circle_vert',
+        'Fig8 H': 'fig8_horz',
+        'Fig8 VS': 'fig8_vert_short',
+        'Fig8 VT': 'fig8_vert_tall',
+        'Sawtooth': 'sawtooth',
+        'Triangle': 'triangle'
+    }
+
+    # Create DataFrame with all required columns (matching real data format)
     df = pd.DataFrame({
         'time': t,
         'x': x,
         'y': y,
         'z': z,
         'yaw': yaw,
+        'platform': platform_str_map[platform_name],
+        'controller': controller_str_map[controller_name],
+        'traj_time': t,
+        'lookahead_time': 1.2,  # Constant lookahead
+        'trajectory': trajectory_str_map[trajectory_name],
+        'comp_time': np.random.uniform(0.0005, 0.002, n_samples),  # 0.5-2ms
+        'traj_double': 'NoSpd',  # String format like real data
+        'traj_spin': 'NoSpin',   # String format like real data
         'vx': vx,
         'vy': vy,
         'vz': vz,
@@ -245,23 +283,20 @@ def generate_log_file(platform_name, controller_name, trajectory_name,
         'vx_ref': vx_ref,
         'vy_ref': vy_ref,
         'vz_ref': vz_ref,
-        'traj_time': t,
-        'lookahead_time': 1.2,  # Constant lookahead
-        'comp_time': np.random.uniform(0.0005, 0.002, n_samples),  # 0.5-2ms
-        'platform': PLATFORM_ENUM[platform_name],
-        'controller': CONTROLLER_ENUM[controller_name],
-        'trajectory': TRAJECTORY_ENUM[trajectory_name],
-        'traj_double': False,
-        'traj_spin': False,
+        'p': p,
+        'q': q,
+        'r': r,
+        'throttle_input': throttle_input,
+        'p_input': p_input,
+        'q_input': q_input,
+        'r_input': r_input,
+        'cbf_v_p': cbf_v_p,
+        'cbf_v_q': cbf_v_q,
+        'cbf_v_r': cbf_v_r,
+        'cbf_v_throttle': cbf_v_throttle,
     })
 
-    # Add PlotJuggler prefix to column names (as they appear in real data)
-    rename_dict = {}
-    for col in df.columns:
-        if col != 'time':
-            rename_dict[col] = f'/plotjuggler/logging/{col}'
-    df.rename(columns=rename_dict, inplace=True)
-    df.rename(columns={'time': '/plotjuggler/logging/__time'}, inplace=True)
+    # No PlotJuggler prefix (real data doesn't have it)
 
     # Save to CSV
     output_dir = Path(output_dir)

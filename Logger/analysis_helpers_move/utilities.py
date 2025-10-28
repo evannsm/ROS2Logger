@@ -40,7 +40,7 @@ TRAJECTORY_NAMES = {
 
 def load_csv(file_path: str) -> pd.DataFrame:
     """
-    Load a CSV file and clean column names by removing the '/plotjuggler/logging/' prefix.
+    Load a CSV file and clean column names by removing the '/plotjuggler/logging/' prefix if present.
 
     Parameters:
     -----------
@@ -54,7 +54,7 @@ def load_csv(file_path: str) -> pd.DataFrame:
     """
     df = pd.read_csv(file_path)
 
-    # Clean column names: remove '/plotjuggler/logging/' prefix
+    # Clean column names: remove '/plotjuggler/logging/' prefix if it exists
     df.columns = df.columns.str.replace('/plotjuggler/logging/', '', regex=False)
     df.columns = df.columns.str.replace('__time', 'time', regex=False)
 
@@ -84,11 +84,25 @@ def extract_metadata_from_data(df: pd.DataFrame) -> Dict[str, str]:
         'traj_spin': False
     }
 
+    # String to standard name mappings
+    PLATFORM_STR_MAP = {'sim': 'Simulation', 'hw': 'Hardware'}
+    CONTROLLER_STR_MAP = {'nr': 'NR Standard', 'nr_enhanced': 'NR Enhanced', 'mpc': 'MPC'}
+    TRAJECTORY_STR_MAP = {
+        'circle_horz': 'Circle H',
+        'circle_vert': 'Circle V',
+        'fig8_horz': 'Fig8 H',
+        'fig8_vert_short': 'Fig8 VS',
+        'fig8_vert_tall': 'Fig8 VT',
+        'sawtooth': 'Sawtooth',
+        'triangle': 'Triangle',
+        'helix': 'Helix'
+    }
+
     # Extract platform
     if 'platform' in df.columns:
         platform_val = df['platform'].mode()[0]  # Most common value
         if isinstance(platform_val, str):
-            metadata['platform'] = platform_val
+            metadata['platform'] = PLATFORM_STR_MAP.get(platform_val, platform_val)
         else:
             platform_val = int(platform_val)
             metadata['platform'] = PLATFORM_NAMES.get(platform_val, f'Platform {platform_val}')
@@ -97,7 +111,7 @@ def extract_metadata_from_data(df: pd.DataFrame) -> Dict[str, str]:
     if 'controller' in df.columns:
         controller_val = df['controller'].mode()[0]  # Most common value
         if isinstance(controller_val, str):
-            metadata['controller'] = controller_val
+            metadata['controller'] = CONTROLLER_STR_MAP.get(controller_val, controller_val)
         else:
             controller_val = int(controller_val)
             metadata['controller'] = CONTROLLER_NAMES.get(controller_val, f'Controller {controller_val}')
@@ -106,17 +120,27 @@ def extract_metadata_from_data(df: pd.DataFrame) -> Dict[str, str]:
     if 'trajectory' in df.columns:
         trajectory_val = df['trajectory'].mode()[0]  # Most common value
         if isinstance(trajectory_val, str):
-            metadata['trajectory'] = trajectory_val
+            metadata['trajectory'] = TRAJECTORY_STR_MAP.get(trajectory_val, trajectory_val)
         else:
             trajectory_val = int(trajectory_val)
             metadata['trajectory'] = TRAJECTORY_NAMES.get(trajectory_val, f'Trajectory {trajectory_val}')
 
     # Extract trajectory modifiers
     if 'traj_double' in df.columns:
-        metadata['traj_double'] = bool(df['traj_double'].mode()[0])
+        traj_double_val = df['traj_double'].mode()[0]
+        if isinstance(traj_double_val, str):
+            # Handle string format: "DblSpd", "NoSpd", etc.
+            metadata['traj_double'] = 'dbl' in traj_double_val.lower() or '2x' in traj_double_val.lower()
+        else:
+            metadata['traj_double'] = bool(traj_double_val)
 
     if 'traj_spin' in df.columns:
-        metadata['traj_spin'] = bool(df['traj_spin'].mode()[0])
+        traj_spin_val = df['traj_spin'].mode()[0]
+        if isinstance(traj_spin_val, str):
+            # Handle string format: "Spin", "NoSpin", etc.
+            metadata['traj_spin'] = 'spin' in traj_spin_val.lower() and 'no' not in traj_spin_val.lower()
+        else:
+            metadata['traj_spin'] = bool(traj_spin_val)
 
     return metadata
 
