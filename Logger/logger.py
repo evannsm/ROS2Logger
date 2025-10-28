@@ -24,11 +24,18 @@ class Logger:
 
 
         self.data_analysis_notebook = 'DataAnalysis.ipynb'
+        self.single_log_notebook = 'SingleLogAnalysis.ipynb'
+        self.comparison_log_notebook = 'ControllerComparison.ipynb'
         self.data_utilities = 'utilities.py'
-        source_path = os.path.join(os.path.dirname(os.path.abspath(__file__)))
+
+
+        source_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "analysis_helpers_move")
         destination_path = os.path.dirname(os.path.dirname(base_path))
+        
         self.copy_file(source_path, destination_path, self.data_analysis_notebook)
         self.copy_file(source_path, destination_path, self.data_utilities)
+        self.copy_file(source_path, destination_path, self.single_log_notebook)
+        self.copy_file(source_path, destination_path, self.comparison_log_notebook)
 
 
     def copy_file(self, source_path: str, destination_path: str, file_to_copy: str):
