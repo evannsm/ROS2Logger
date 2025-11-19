@@ -12,12 +12,21 @@ class Logger:
             filename = filename.rstrip(os.sep)
         self.filename = filename
 
-        base_path = os.path.join(base_dir, 'data_analysis/log_files/') # Append the 'data_analysis' folder to the path
-        parts = base_path.split(os.sep) # Split the path into components
-        parts = ["src" if part in ("build","install") else part for part in parts] # Replace 'build' with 'src' if it exists in the path
-        base_path = os.sep.join(parts) # Reconstruct the new path
+        base_dir = os.path.dirname(base_dir)  # Move up one directory level
+        print(f"base_dir after moving up one level: {base_dir}")
 
-        self.full_path = os.path.join(base_path, self.filename) # Combine the base path with the filename
+        parts = base_dir.split(os.sep) # Split the path into components
+        parts = ["src" if part in ("build","install") else part for part in parts] # Replace 'build' with 'src' if it exists in the path
+
+        # Insert new folders after the first occurrence of "src"
+        if "src" in parts:
+            idx = parts.index("src") + 1
+            parts[idx:idx] = ["data_analysis", "log_files"]
+
+        base_dir = os.sep.join(parts) # Reconstruct the new path
+
+
+        self.full_path = os.path.join(base_dir, self.filename) # Combine the base path with the filename
         os.makedirs(os.path.dirname(self.full_path), exist_ok=True) # Ensure the directory exists, and creates it if it doesn't
 
         print(f"[logger] Writing to: {self.full_path}")
@@ -30,7 +39,7 @@ class Logger:
 
 
         source_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "analysis_helpers_move")
-        destination_path = os.path.dirname(os.path.dirname(base_path))
+        destination_path = os.path.dirname(os.path.dirname(base_dir))
         
         self.copy_file(source_path, destination_path, self.data_analysis_notebook)
         self.copy_file(source_path, destination_path, self.data_utilities)
