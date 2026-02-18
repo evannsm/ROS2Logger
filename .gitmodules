@@ -1,0 +1,3 @@
+[submodule "Logger/analysis_helpers_move"]
+	path = Logger/analysis_helpers_move
+	url = git@github.com:evannsm/analysis_helpers_move.git
