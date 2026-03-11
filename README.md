@@ -1,4 +1,4 @@
-# ROS2Logger
+# ros2_logger
 
 A ROS 2 Python library for structured experiment data logging. Automatically discovers log variables from your node at shutdown, writes structured CSVs, and generates Jupyter analysis notebooks.
 
@@ -21,7 +21,7 @@ A ROS 2 Python library for structured experiment data logging. Automatically dis
 
 1. **Clone** into your ROS 2 workspace `src/` directory:
    ```bash
-   git clone git@github.com:evannsm/ROS2Logger.git
+   git clone git@github.com:evannsm/ROS2Logger.git ros2_logger
    ```
 2. **Build** the workspace:
    ```bash
@@ -32,8 +32,8 @@ A ROS 2 Python library for structured experiment data logging. Automatically dis
 ## Usage
 
 ```python
-from ROS2Logger.Logger.logger import Logger
-from ROS2Logger.Logger.logtypes import ColumnarLog
+from ros2_logger.logger import Logger
+from ros2_logger.logtypes import ColumnarLog
 
 class MyNode(Node):
     def __init__(self):
@@ -56,8 +56,8 @@ On shutdown, the logger automatically discovers all `ColumnarLog` attributes, wr
 ## Package Structure
 
 ```
-ROS2Logger/
-├── Logger/
+ros2_logger/
+├── ros2_logger/
 │   ├── logger.py                    # Main Logger class
 │   ├── logtypes.py                  # ColumnarLog and related types
 │   ├── shutdown_helpers.py          # Shutdown hook management

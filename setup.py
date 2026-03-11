@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-package_name = 'Logger'
+package_name = 'ros2_logger'
 
 setup(
     name=package_name,
