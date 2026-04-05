@@ -21,13 +21,13 @@ A ROS 2 Python library for structured experiment data logging. Automatically dis
 
 1. **Clone** into your ROS 2 workspace `src/` directory:
    ```bash
-   git clone git@github.com:evannsm/ROS2Logger.git ros2_logger
+   git clone git@github.com:evannsmc/ROS2Logger.git ros2_logger
    ```
 2. **Build** the workspace:
    ```bash
    colcon build --symlink-install
    ```
-3. **Try the example** — use the [`test_logger`](https://github.com/evannsm/test_logger) package for a working example.
+3. **Try the example** — use the [`test_logger`](https://github.com/evannsmc/test_logger) package for a working example.
 
 ## Usage
 
