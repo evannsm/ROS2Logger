@@ -21,7 +21,11 @@ A ROS 2 Python library for structured experiment data logging. Automatically dis
 
 1. **Clone** into your ROS 2 workspace `src/` directory:
    ```bash
+<<<<<<< Updated upstream
    git clone git@github.com:evannsmc/ROS2Logger.git ros2_logger
+=======
+   git clone git@github.com:evannsmc/ROS2Logger.git
+>>>>>>> Stashed changes
    ```
 2. **Build** the workspace:
    ```bash

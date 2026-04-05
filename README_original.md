@@ -34,7 +34,11 @@ A custom ROS 2 logging utility that makes structured experiment logging painless
 1. **Create** a ROS 2 workspace with a `src/` directory.
 2. **Clone** this repo into `src/`:
    ```bash
+<<<<<<< Updated upstream
    git clone git@github.com:evannsmc/ROS2Logger.git ros2_logger
+=======
+   git clone git@github.com:evannsmc/ROS2Logger.git
+>>>>>>> Stashed changes
    ```
 3. **Build** the workspace (symbolic links preferred):
    ```bash
